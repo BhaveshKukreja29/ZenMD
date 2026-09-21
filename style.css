@@ -142,7 +142,7 @@ html[data-theme="dark"] .icon-sun {
 
 .page {
   display: grid;
-  width: min(38rem, 100%);
+  width: min(45rem, 100%);
   margin: 0 auto;
   padding:
     max(2.6rem, calc(env(safe-area-inset-top) + 2.25rem))
