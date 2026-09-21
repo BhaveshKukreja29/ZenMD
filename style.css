@@ -1,0 +1,380 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+:root {
+  --bg: #f3efe6;
+  --fg: #1c1914;
+  --muted: color-mix(in srgb, var(--fg) 65%, var(--bg));
+  --rule: color-mix(in srgb, var(--fg) 12%, var(--bg));
+  --code: color-mix(in srgb, var(--fg) 6%, var(--bg));
+  --font: "Newsreader", "Iowan Old Style", Palatino, serif;
+  --mono: "IBM Plex Mono", ui-monospace, Menlo, monospace;
+  --ease: cubic-bezier(0.4, 0, 0.2, 1);
+  --fade: 0.38s var(--ease);
+  --chrome: 2.75rem;
+}
+
+html[data-theme="dark"] {
+  --bg: #131210;
+  --fg: #ece7dc;
+}
+
+html {
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg);
+  color-scheme: light;
+  scrollbar-width: thin;
+  scrollbar-color: var(--rule) transparent;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  transition: background var(--fade), color var(--fade);
+}
+
+html[data-theme="dark"] {
+  color-scheme: dark;
+}
+
+body {
+  margin: 0;
+  overflow-x: hidden;
+  background: transparent;
+  color: inherit;
+  font: 1.3125rem/1.55 var(--font);
+  font-optical-sizing: auto;
+  -webkit-font-smoothing: antialiased;
+  transition: color var(--fade);
+}
+
+.chrome {
+  position: fixed;
+  top: max(0.7rem, env(safe-area-inset-top));
+  right: max(0.55rem, env(safe-area-inset-right));
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.chrome button {
+  width: var(--chrome);
+  height: var(--chrome);
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  cursor: pointer;
+  opacity: 0.5;
+  transition: opacity 0.2s var(--ease);
+}
+
+.chrome button:disabled {
+  cursor: wait;
+  opacity: 0.35;
+}
+
+.chrome button:hover:not(:disabled),
+.chrome button:focus-visible {
+  opacity: 0.8;
+}
+
+.chrome button:focus-visible {
+  outline: 1px solid var(--fg);
+  outline-offset: 0.2rem;
+}
+
+.chrome svg {
+  grid-area: 1 / 1;
+  width: 1.25rem;
+  height: 1.25rem;
+  margin: auto;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  opacity: 0;
+  transition: opacity var(--fade);
+  pointer-events: none;
+}
+
+body:not(.read) .icon-eye,
+body.read .icon-pencil,
+html[data-theme="light"] .icon-moon,
+html[data-theme="dark"] .icon-sun {
+  opacity: 1;
+}
+
+.repo {
+  position: fixed;
+  right: max(0.55rem, env(safe-area-inset-right));
+  bottom: max(0.7rem, env(safe-area-inset-bottom));
+  z-index: 2;
+  width: var(--chrome);
+  height: var(--chrome);
+  display: grid;
+  place-items: center;
+  color: inherit;
+  opacity: 0.5;
+  transition: opacity 0.2s var(--ease);
+}
+
+.repo:hover,
+.repo:focus-visible {
+  opacity: 0.8;
+}
+
+.repo:focus-visible {
+  outline: 1px solid var(--fg);
+  outline-offset: 0.2rem;
+}
+
+.repo svg {
+  width: 1.25rem;
+  height: 1.25rem;
+  fill: currentColor;
+}
+
+.page {
+  display: grid;
+  width: min(38rem, 100%);
+  margin: 0 auto;
+  padding:
+    max(2.6rem, calc(env(safe-area-inset-top) + 2.25rem))
+    max(3.6rem, calc(env(safe-area-inset-right) + 1.25rem))
+    6rem
+    max(1.5rem, env(safe-area-inset-left));
+}
+
+#source,
+#preview {
+  grid-area: 1 / 1;
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  transition: opacity var(--fade), visibility var(--fade);
+}
+
+#source {
+  display: block;
+  field-sizing: content;
+  min-height: calc(100dvh - 8.6rem);
+  margin: 0;
+  padding: 0;
+  border: 0;
+  outline: none;
+  resize: none;
+  overflow: hidden;
+  background: transparent;
+  color: inherit;
+  caret-color: var(--fg);
+  font: inherit;
+  tab-size: 2;
+}
+
+#source::selection,
+#preview ::selection {
+  background: var(--fg);
+  color: var(--bg);
+}
+
+#preview {
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  visibility: hidden;
+  opacity: 0;
+  pointer-events: none;
+}
+
+body.read #preview {
+  visibility: visible;
+  opacity: 1;
+  pointer-events: auto;
+}
+
+body.read #source {
+  visibility: hidden;
+  opacity: 0;
+  pointer-events: none;
+}
+
+#preview > :first-child {
+  margin-top: 0;
+}
+
+#preview h1,
+#preview h2,
+#preview h3 {
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  overflow-wrap: break-word;
+}
+
+#preview h1 {
+  font-size: 2em;
+  margin: 0 0 0.7em;
+}
+
+#preview h2 {
+  font-size: 1.4em;
+  margin: 1.55em 0 0.5em;
+}
+
+#preview h3 {
+  font-size: 1.12em;
+  margin: 1.35em 0 0.4em;
+}
+
+#preview p,
+#preview ul,
+#preview ol,
+#preview blockquote,
+#preview pre,
+#preview table,
+#preview .katex-display {
+  margin: 0 0 1.05em;
+}
+
+#preview ul,
+#preview ol {
+  padding-left: 1.2em;
+}
+
+#preview a {
+  color: inherit;
+}
+
+#preview hr {
+  border: 0;
+  height: 1px;
+  margin: 2.1em 0;
+  background: var(--rule);
+}
+
+#preview blockquote {
+  margin-left: 0;
+  padding-left: 1rem;
+  border-left: 1.5px solid var(--fg);
+  color: var(--muted);
+}
+
+#preview code {
+  font-family: var(--mono);
+  font-size: 0.78em;
+}
+
+#preview :not(pre) > code {
+  padding: 0.05em 0.28em;
+  background: var(--code);
+}
+
+#preview pre {
+  padding: 1rem;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  background: var(--code);
+  line-height: 1.55;
+  max-width: 100%;
+}
+
+#preview pre code {
+  background: none;
+  padding: 0;
+  display: block;
+  min-width: min-content;
+}
+
+#preview pre.shiki {
+  background: var(--code) !important;
+  white-space: normal;
+}
+
+#preview pre.shiki .line {
+  display: block;
+  white-space: pre;
+}
+
+#preview pre.shiki .line:last-child:empty {
+  display: none;
+}
+
+#preview img {
+  max-width: 100%;
+  height: auto;
+}
+
+#preview table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.92em;
+}
+
+#preview th,
+#preview td {
+  text-align: left;
+  padding: 0.35em 0.55em 0.35em 0;
+  border-bottom: 1px solid var(--rule);
+}
+
+#preview .katex-display {
+  overflow-x: auto;
+  overflow-y: hidden;
+  max-width: 100%;
+}
+
+@media (max-width: 40rem) {
+  body {
+    font-size: 1.15rem;
+  }
+
+  .page {
+    padding-left: max(1.15rem, env(safe-area-inset-left));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html,
+  body,
+  #source,
+  #preview,
+  .chrome button,
+  .chrome svg,
+  .repo {
+    transition: none;
+  }
+}
+
+@media print {
+  .chrome,
+  .repo,
+  #source {
+    display: none !important;
+  }
+
+  html {
+    background: #fff;
+    color: #111;
+  }
+
+  #preview {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    pointer-events: none;
+  }
+
+  #preview .print-fallback {
+    margin: 0;
+    padding: 0;
+    background: none;
+    font: inherit;
+    white-space: pre-wrap;
+    overflow: visible;
+  }
+}
